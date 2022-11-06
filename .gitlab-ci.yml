@@ -1,0 +1,50 @@
+image: node:16-alpine
+
+# 只有往 master 分支合并的时候才执行此流水线
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
+      when: always
+
+# 定义三个阶段
+stages:
+  - install
+  - build
+  - deploy
+
+# 缓存产物，在多个 job 之间共享
+cache:
+  - key: node-modules
+    paths:
+      - node_modules
+
+install:
+  stage: install
+  script:
+    - npm install cnpm --global --registry=https://registry.npmmirror.com
+    - cnpm i
+  # only: # 只有 package.json 文件更改时，才重新跑 install
+  #   changes:
+  #     - "package.json"
+  retry: 2 # install 失败重试次数
+
+build:
+  stage: build
+  script: npm run build
+  artifacts:
+    paths:
+      - dist
+    expire_in: 1 hrs # 设置作品留存时间，1小时后自动失效
+
+# 使用 oss sdk上传
+deploy:
+  stage: deploy
+  script: npm run deploy:oss
+# deploy:
+#   stage: deploy
+#   script:
+#     - wget https://gosspublic.alicdn.com/ossutil/1.7.14/ossutil64
+#     - chmod 755 ossutil64
+#     - ./ossutil64 config -i ${accessKeyID} -k ${accessKeySecret} -e ${endPoint} -L CH -c ~/.ossutilconfig
+#     - ./ossutil64 -c ~/.ossutilconfig cp -r -f --meta Cache-Control:no-cache dist oss://tutulist-web-static/
+#     - ./ossutil64 -c ~/.ossutilconfig cp -r -f --meta Cache-Control:max-age=31536000 dist/assets oss://tutulist-web-static/assets
