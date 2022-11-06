@@ -81,6 +81,7 @@ const handleClick = (event: MouseEvent, eventInfo: EventType) => {
         'content !cursor-pointer',
         {
           active: isActive,
+          done: !isActive && eventInfo?.isDone,
         },
       ]"
       @click="handleClick($event, eventInfo!)"
