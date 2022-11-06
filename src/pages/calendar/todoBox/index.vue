@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, toRaw, watch } from "vue";
+import { computed, ref, toRaw, watchEffect } from "vue";
 import { DndProvider } from "vue3-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import useGlobalStore from "@/stores/global";
@@ -33,7 +33,7 @@ const activeInfo = computed(() => {
   return null;
 });
 
-onMounted(() => {
+watchEffect(() => {
   folderList.value = globalStore.folderList;
   if (folderList.value.length) {
     activeKey.value = folderList.value[0].id;
