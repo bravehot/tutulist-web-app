@@ -4,7 +4,10 @@ import { cloneDeep } from "lodash-es";
 import { weekList } from "@/pages/calendar/home/constant/index";
 import { StartWeekEnum, WeekNameEnum } from "@/types/setting/calendar";
 
+import useGlobalStore from "@/stores/global";
+
 import { getSettingInfo } from "@/service/setting";
+import { ThemeEnum } from "@/types/enum";
 
 const useCalendarStore = defineStore("calendar", {
   state: () => ({
@@ -42,8 +45,15 @@ const useCalendarStore = defineStore("calendar", {
     async getCalendarSetting() {
       const { code, data } = await getSettingInfo();
       if (code === 200) {
-        this.setStartSunday(data.startWeek);
-        this.setStarWeek(data.weekName);
+        const globalStore = useGlobalStore();
+        const { startWeek, weekName, theme } = data;
+        this.setStartSunday(startWeek);
+        this.setStarWeek(weekName);
+        globalStore.settingTheme = theme;
+
+        if (theme !== ThemeEnum.SYSTEM) {
+          globalStore.handleTheme(theme === ThemeEnum.DARK ? "dark" : null);
+        }
       }
     },
   },

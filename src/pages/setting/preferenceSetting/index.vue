@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import CalendarSetting from "./CalendarSetting.vue";
+import Setting from "./Setting.vue";
 </script>
 <template>
-  <CalendarSetting />
+  <Setting />
 </template>

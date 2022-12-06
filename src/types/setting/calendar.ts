@@ -1,3 +1,5 @@
+import { ThemeEnum } from "../enum";
+
 export enum StartWeekEnum {
   SUNDAY = "sunday",
   MONDAY = "monday",
@@ -11,4 +13,5 @@ export enum WeekNameEnum {
 export type Setting = {
   startWeek: StartWeekEnum;
   weekName: WeekNameEnum;
+  theme: ThemeEnum;
 };

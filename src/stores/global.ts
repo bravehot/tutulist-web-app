@@ -4,6 +4,7 @@ import { getFolderListRequest } from "@/service/calendar/todoBox";
 import type { GlobalStoreType } from "@/types/stores/globar";
 import { UserGenderEnum, UserInfo, UserTokenEnum } from "@/types/user";
 import { TodoFolder } from "@/types/pages/todoBox";
+import { ThemeEnum } from "@/types/enum";
 
 import useCalendarStore from "./calendar";
 import { getUserInfo } from "@/service/user";
@@ -13,6 +14,7 @@ const useGlobalStore = defineStore("global", {
     theme: null,
     userInfo: null,
     folderList: [],
+    settingTheme: ThemeEnum.SYSTEM,
   }),
   actions: {
     setFolderList(foderList: TodoFolder[]) {
